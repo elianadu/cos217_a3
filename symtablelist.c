@@ -116,7 +116,7 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey, const void *pvVa
 {
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
-    void vOldValue;
+    void *pvOldValue;
 
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
@@ -127,9 +127,9 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey, const void *pvVa
     {
         psNextNode = psCurrentNode->psNextNode;
         if (*(psCurrentNode->pcKey) == *pcKey){
-            vOldValue = psCurrentNode->pvValue;
+            pvOldValue = psCurrentNode->pvValue;
             psCurrentNode->pvValue = pvValue;
-            return vOldValue;
+            return pvOldValue;
         }
     }
     return NULL;
@@ -156,6 +156,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey){
 /*--------------------------------------------------------------------*/
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey){
+    return pcKey;
 }
 
 /*--------------------------------------------------------------------*/
@@ -174,13 +175,14 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
    free(oSymTable->psFirstNode);
    oSymTable->psFirstNode = psNextNode;
    return (void*)pvItem; */
+   return pcKey;
 }
 
 /*--------------------------------------------------------------------*/
 
 void SymTable_map(SymTable_T oSymTable,
      void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
-     const void *pvExtra);
+     const void *pvExtra)
 {
    /* struct SymTableNode *psCurrentNode;
 
