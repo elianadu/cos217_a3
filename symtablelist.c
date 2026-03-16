@@ -5,6 +5,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include "symtable.h"
 
 /*--------------------------------------------------------------------*/
@@ -76,6 +77,7 @@ void SymTable_free(SymTable_T oSymTable)
 /*--------------------------------------------------------------------*/
 
  size_t SymTable_getLength(SymTable_T oSymTable){
+    assert(oSymTable != NULL);
     return oSymTable->iLength;
  }
 
@@ -96,7 +98,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
 
         pcNewKey = (char*)malloc(strlen(pcKey)+1);
         if (pcNewKey == NULL)
-        /*TODO: mem leak*/
+            free(psNewNode);
             return 0;
         strcpy(pcNewKey, pcKey);
 
@@ -159,7 +161,20 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey){
 /*--------------------------------------------------------------------*/
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey){
-    return pcKey;
+    struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
+
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+
+    for (psCurrentNode = oSymTable->psFirstNode;
+        psCurrentNode != NULL;
+        psCurrentNode = psNextNode)
+    {
+        psNextNode = psCurrentNode->psNextNode;
+        if (!strcmp(psCurrentNode->pcKey, pcKey)) return psCurrentNode->pvValue;
+    }
+    return NULL;
 }
 
 /*--------------------------------------------------------------------*/
@@ -167,18 +182,34 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey){
 /* TODO: change iLength */
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
-   /*  const void *pvItem;
-   struct SymTableNode *psNextNode;
+    struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
+    struct SymTableNode *psPrevNode;
+    void *pvOldValue;
 
-   assert(oSymTable != NULL);
-   assert(oSymTable->psFirstNode != NULL);
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
-   pvItem = oSymTable->psFirstNode->pvItem;
-   psNextNode = oSymTable->psFirstNode->psNextNode;
-   free(oSymTable->psFirstNode);
-   oSymTable->psFirstNode = psNextNode;
-   return (void*)pvItem; */
-   return pcKey;
+    for (psCurrentNode = oSymTable->psFirstNode;
+        psCurrentNode != NULL;
+        psCurrentNode = psNextNode)
+    {
+        psNextNode = psCurrentNode->psNextNode;
+        if (!strcmp(psCurrentNode->pcKey, pcKey)) {
+            pvOldValue = psCurrentNode->pvValue;
+            if (psCurrentNode == oSymTable->psFirstNode()) {
+                oSymTable->psFirstNode = psNextNode;
+            }
+            else {
+                psPrevNode->psNextNode = psNextNode;
+            }
+            free(psCurrentNode);
+            oSymTable->iLength -= 1;
+            return pvOldValue;
+        }
+        psPrevNode = psCurrentNode;
+    }
+    return NULL;
 }
 
 /*--------------------------------------------------------------------*/
