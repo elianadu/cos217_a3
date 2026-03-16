@@ -180,8 +180,6 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey){
 
 /*--------------------------------------------------------------------*/
 
-/* TODO: change iLength */
-
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
@@ -228,4 +226,15 @@ void SymTable_map(SymTable_T oSymTable,
         psCurrentNode != NULL;
         psCurrentNode = psCurrentNode->psNextNode)
       (*pfApply)((void*)psCurrentNode->pvItem, (void*)pvExtra); */
+    
+    struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
+
+    assert(oSymTable != NULL);
+    assert(pfApply != NULL);
+
+    for (psCurrentNode = oSymTable->psFirstNode;
+        psCurrentNode != NULL;
+        psCurrentNode = psNextNode) 
+        (*pfApply)(pcKey, pvValue, pvExtra)
 }
