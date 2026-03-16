@@ -236,5 +236,5 @@ void SymTable_map(SymTable_T oSymTable,
     for (psCurrentNode = oSymTable->psFirstNode;
         psCurrentNode != NULL;
         psCurrentNode = psNextNode) 
-        (*pfApply)(pcKey, pvValue, pvExtra)
+        (*pfApply)((char*) psCurrentNode->pcKey, (void*) psCurrentNode->pvValue, (void*) pvExtra);
 }
