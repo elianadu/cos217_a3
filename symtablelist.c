@@ -15,7 +15,7 @@ to form a list.  */
 struct SymTableNode
 {
    /* The key. */
-   const void *pcKey;
+   const char *pcKey;
 
    /* The value. */
    const void *pvValue;
