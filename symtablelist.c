@@ -92,7 +92,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
    if (psNewNode == NULL)
       return 0;
 
-    if (SymTable_contains(oSymTable, pcKey)) {
+    if (!SymTable_contains(oSymTable, pcKey)) {
         pcNewKey = (char*)malloc(sizeof(pcKey));
         if (pcNewKey == NULL)
             return 0;
@@ -127,7 +127,7 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey, const void *pvVa
     {
         psNextNode = psCurrentNode->psNextNode;
         if (*(psCurrentNode->pcKey) == *pcKey){
-            pvOldValue = psCurrentNode->pvValue;
+            pvOldValue = (void *) psCurrentNode->pvValue;
             psCurrentNode->pvValue = pvValue;
             return pvOldValue;
         }
