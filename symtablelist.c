@@ -15,7 +15,7 @@ to form a list.  */
 struct SymTableNode
 {
    /* The key. */
-   const void *pvKey;
+   const void *pcKey;
 
    /* The value. */
    const void *pvValue;
@@ -32,6 +32,9 @@ struct SymTable
 {
    /* The address of the first SymTableNode. */
    struct SymTableNode *psFirstNode;
+
+   /* The number of bindings */
+   int iLength;
 };
 
 /*--------------------------------------------------------------------*/
@@ -45,6 +48,8 @@ SymTable_T SymTable_new(void)
       return NULL;
 
    oSymTable->psFirstNode = NULL;
+   oSymTable->iLength = 0;
+   
    return oSymTable;
 }
 
@@ -71,7 +76,7 @@ void SymTable_free(SymTable_T oSymTable)
 /*--------------------------------------------------------------------*/
 
  size_t SymTable_getLength(SymTable_T oSymTable){
-    return 0;
+    return oSymTable->iLength;
  }
 
 /*--------------------------------------------------------------------*/
@@ -79,24 +84,87 @@ void SymTable_free(SymTable_T oSymTable)
 int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
 {
    struct SymTableNode *psNewNode;
+   const char *pcNewKey;
 
    assert(oSymTable != NULL);
 
-   psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));
+   psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));    
    if (psNewNode == NULL)
       return 0;
 
-   psNewNode->pvItem = pvItem;
-   psNewNode->psNextNode = oSymTable->psFirstNode;
-   oSymTable->psFirstNode = psNewNode;
-   return 1;
+    if (SymTable_contains(oSymTable, pcKey)) {
+        pcNewKey = (const char*)malloc(sizeof(pcKey));
+        if (pcNewKey == NULL)
+            return 0;
+        *pcNewKey = *pcKey
+
+        psNewNode->pcKey = pcNewKey;
+        psNewNode->pvValue = pvValue;
+        psNewNode->psNextNode = oSymTable->psFirstNode;
+        oSymTable->psFirstNode = psNewNode;
+        oSymTable->iLength += 1;
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 /*--------------------------------------------------------------------*/
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey, const void *pvValue);
 {
-   const void *pvItem;
+    struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
+    void vOldValue;
+
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+
+    for (psCurrentNode = oSymTable->psFirstNode;
+        psCurrentNode != NULL;
+        psCurrentNode = psNextNode)
+    {
+        psNextNode = psCurrentNode->psNextNode;
+        if (*(psCurrentNode->pcKey) == *pcKey){
+            vOldValue = psCurrentNode->pvValue;
+            psCurrentNode->pvValue = pvValue;
+            return vOldValue;
+        }
+    }
+    return NULL;
+}
+
+/*--------------------------------------------------------------------*/
+
+int SymTable_contains(SymTable_T oSymTable, const char *pcKey){
+    struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
+
+    assert(oSymTable != NULL);
+
+    for (psCurrentNode = oSymTable->psFirstNode;
+        psCurrentNode != NULL;
+        psCurrentNode = psNextNode)
+    {
+        psNextNode = psCurrentNode->psNextNode;
+        if (*(psCurrentNode->pcKey) == *pcKey) return 1;
+    }
+    return 0;
+}
+
+/*--------------------------------------------------------------------*/
+
+void *SymTable_get(SymTable_T oSymTable, const char *pcKey){
+    return 0;
+}
+
+/*--------------------------------------------------------------------*/
+
+/* TODO: change iLength */
+
+void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
+    const void *pvItem;
    struct SymTableNode *psNextNode;
 
    assert(oSymTable != NULL);
@@ -107,25 +175,6 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey, const void *pvVa
    free(oSymTable->psFirstNode);
    oSymTable->psFirstNode = psNextNode;
    return (void*)pvItem;
-}
-
-/*--------------------------------------------------------------------*/
-
-int SymTable_contains(SymTable_T oSymTable, const char *pcKey){
-    return 0;
-}
-
-/*--------------------------------------------------------------------*/
-
-
-void *SymTable_get(SymTable_T oSymTable, const char *pcKey){
-    return 0;
-}
-
-/*--------------------------------------------------------------------*/
-
-void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
-    return 0;
 }
 
 /*--------------------------------------------------------------------*/
