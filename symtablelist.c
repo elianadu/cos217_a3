@@ -89,16 +89,16 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
    assert(oSymTable != NULL);
    assert(pcKey != NULL);
 
-   /* TODO: malloc later */
-   psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));    
-   if (psNewNode == NULL)
-      return 0;
-
     if (!SymTable_contains(oSymTable, pcKey)) {
-        pcNewKey = (char*)malloc(sizeof(pcKey));
-        if (pcNewKey == NULL)
+        psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));    
+        if (psNewNode == NULL)
             return 0;
-        *pcNewKey = *pcKey;
+
+        pcNewKey = (char*)malloc(strlen(pcKey)+1);
+        if (pcNewKey == NULL)
+        /*TODO: mem leak*/
+            return 0;
+        strcpy(pcNewKey, pcKey);
 
         psNewNode->pcKey = pcNewKey;
         psNewNode->pvValue = pvValue;
