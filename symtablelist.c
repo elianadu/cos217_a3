@@ -97,9 +97,10 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
             return 0;
 
         pcNewKey = (char*)malloc(strlen(pcKey)+1);
-        if (pcNewKey == NULL)
+        if (pcNewKey == NULL) {
             free(psNewNode);
             return 0;
+        }
         strcpy(pcNewKey, pcKey);
 
         psNewNode->pcKey = pcNewKey;
@@ -172,7 +173,7 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey){
         psCurrentNode = psNextNode)
     {
         psNextNode = psCurrentNode->psNextNode;
-        if (!strcmp(psCurrentNode->pcKey, pcKey)) return psCurrentNode->pvValue;
+        if (!strcmp(psCurrentNode->pcKey, pcKey)) return (void*) psCurrentNode->pvValue;
     }
     return NULL;
 }
@@ -196,7 +197,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     {
         psNextNode = psCurrentNode->psNextNode;
         if (!strcmp(psCurrentNode->pcKey, pcKey)) {
-            pvOldValue = psCurrentNode->pvValue;
+            pvOldValue = (void*) psCurrentNode->pvValue;
             if (psCurrentNode == oSymTable->psFirstNode) {
                 oSymTable->psFirstNode = psNextNode;
             }
