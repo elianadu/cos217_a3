@@ -6,7 +6,7 @@ CFLAGS =
 # CFLAGS = -D NDEBUG
 # CFLAGS = -D NDEBUG -O
 # Dependency rules for non-file targets
-all: testsymtablehash #testsymtablelist
+all: testsymtablehash testsymtablelist
 clobber: clean
 	rm -f *~ \#*\#
 clean:
