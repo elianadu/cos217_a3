@@ -207,7 +207,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey){
 
     uListIdx = SymTable_hash(pcKey, auBucketCounts[oSymTable->iBucketIdx]);
 
-    for (psCurrentNode = oSymTable->psFirstNode[uListIdx];
+    for (psCurrentNode = oSymTable->psFirstNodes[uListIdx];
         psCurrentNode != NULL;
         psCurrentNode = psNextNode)
     {
