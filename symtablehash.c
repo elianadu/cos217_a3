@@ -37,7 +37,7 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
 /* Each binding is stored in a SymTableNode.  SymTableNodes are 
 pointers to a linked list.  */
 
-struct *SymTableNode
+struct SymTableNode
 {
    /* The key. */
    const char *pcKey;
