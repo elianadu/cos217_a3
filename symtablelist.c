@@ -79,7 +79,7 @@ void SymTable_free(SymTable_T oSymTable)
 
  size_t SymTable_getLength(SymTable_T oSymTable){
     assert(oSymTable != NULL);
-    return oSymTable->iLength;
+    return (size_t) oSymTable->iLength;
  }
 
 /*--------------------------------------------------------------------*/
@@ -91,6 +91,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
 
    assert(oSymTable != NULL);
    assert(pcKey != NULL);
+   assert(pvValue != NULL);
 
     if (!SymTable_contains(oSymTable, pcKey)) {
         psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));    
@@ -127,6 +128,7 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey, const void *pvVa
 
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
+    assert(pvValue != NULL);
 
     for (psCurrentNode = oSymTable->psFirstNode;
         psCurrentNode != NULL;
@@ -227,6 +229,7 @@ void SymTable_map(SymTable_T oSymTable,
 
     assert(oSymTable != NULL);
     assert(pfApply != NULL);
+    assert(pvExtra != NULL);
 
     for (psCurrentNode = oSymTable->psFirstNode;
         psCurrentNode != NULL;
