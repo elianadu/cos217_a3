@@ -162,8 +162,6 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
     else {
         return 0;
     }
-
-    return 0;
 }
 
 /*--------------------------------------------------------------------*/
