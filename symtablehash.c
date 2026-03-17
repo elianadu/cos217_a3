@@ -294,7 +294,7 @@ void SymTable_map(SymTable_T oSymTable,
             if (oSymTable->psFirstNodes[i] == NULL) continue;
             for (psCurrentNode = oSymTable->psFirstNodes[i];
             psCurrentNode != NULL;
-            psCurrentNode = psNextNode) {
+            psCurrentNode->psNextNode) {
                 (*pfApply)((char*) psCurrentNode->pcKey, (void*) psCurrentNode->pvValue, (void*) pvExtra);
             }
         }
