@@ -193,7 +193,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
-    psPrevNode = psCurrentNode;
+    psPrevNode = oSymTable->psFirstNode;
 
     for (psCurrentNode = oSymTable->psFirstNode;
         psCurrentNode != NULL;
