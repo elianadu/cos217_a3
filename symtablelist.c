@@ -108,9 +108,11 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
         psNewNode->psNextNode = oSymTable->psFirstNode;
         oSymTable->psFirstNode = psNewNode;
         oSymTable->iLength += 1;
+        free(pcNewKey);
         return 1;
     }
     else {
+        free(pcNewKey);
         return 0;
     }
 }
