@@ -68,7 +68,7 @@ void SymTable_free(SymTable_T oSymTable)
         psCurrentNode = psNextNode)
    {
       psNextNode = psCurrentNode->psNextNode;
-      /* free((char *) psCurrentNode->pcKey); */
+      free((char *) psCurrentNode->pcKey);
       free(psCurrentNode);
    }
 
@@ -91,7 +91,6 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
 
    assert(oSymTable != NULL);
    assert(pcKey != NULL);
-   assert(pvValue != NULL);
 
     if (!SymTable_contains(oSymTable, pcKey)) {
         psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));    
@@ -128,7 +127,6 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey, const void *pvVa
 
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
-    assert(pvValue != NULL);
 
     for (psCurrentNode = oSymTable->psFirstNode;
         psCurrentNode != NULL;
@@ -208,7 +206,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
             else {
                 psPrevNode->psNextNode = psNextNode;
             }
-            /* free((char *) psCurrentNode->pcKey);*/
+            free((char *) psCurrentNode->pcKey);*/
             free(psCurrentNode);
             oSymTable->iLength -= 1;
             return pvOldValue;
@@ -228,7 +226,6 @@ void SymTable_map(SymTable_T oSymTable,
 
     assert(oSymTable != NULL);
     assert(pfApply != NULL);
-    assert(pvExtra != NULL);
 
     for (psCurrentNode = oSymTable->psFirstNode;
         psCurrentNode != NULL;
