@@ -1,6 +1,6 @@
 # Macros
-CC = gcc217
-# CC = gcc217m
+# CC = gcc217
+CC = gcc217m
 CFLAGS =
 # CFLAGS = -g
 # CFLAGS = -D NDEBUG
