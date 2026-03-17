@@ -170,14 +170,17 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey, const void *pvValue)
 {
-    /* struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
     void *pvOldValue;
+    size_t i;
 
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
-    for (psCurrentNode = oSymTable->psFirstNode;
+    i = SymTable_hash(pcKey, auBucketCounts[oSymTable->iBucketIdx]);
+
+    for (psCurrentNode = oSymTable->psFirstNodes[i];
         psCurrentNode != NULL;
         psCurrentNode = psNextNode)
     {
@@ -188,8 +191,6 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey, const void *pvVa
             return pvOldValue;
         }
     }
-    return NULL; */
-
     return NULL;
 }
 
@@ -218,46 +219,49 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey){
 /*--------------------------------------------------------------------*/
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey){
-    /* struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
+    size_t i;
 
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
-    for (psCurrentNode = oSymTable->psFirstNode;
+    i = SymTable_hash(pcKey, auBucketCounts[oSymTable->iBucketIdx]);
+
+    for (psCurrentNode = oSymTable->psFirstNodes[i];
         psCurrentNode != NULL;
         psCurrentNode = psNextNode)
     {
         psNextNode = psCurrentNode->psNextNode;
         if (!strcmp(psCurrentNode->pcKey, pcKey)) return (void*) psCurrentNode->pvValue;
     }
-    return NULL; */
-
     return NULL;
 }
 
 /*--------------------------------------------------------------------*/
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
-    /* struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
     struct SymTableNode *psPrevNode;
     void *pvOldValue;
+    size_t i;
 
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
+    i = SymTable_hash(pcKey, auBucketCounts[oSymTable->iBucketIdx]);
     psPrevNode = oSymTable->psFirstNode;
 
-    for (psCurrentNode = oSymTable->psFirstNode;
+    for (psCurrentNode = oSymTable->psFirstNodes[i];
         psCurrentNode != NULL;
         psCurrentNode = psNextNode)
     {
         psNextNode = psCurrentNode->psNextNode;
         if (!strcmp(psCurrentNode->pcKey, pcKey)) {
             pvOldValue = (void*) psCurrentNode->pvValue;
-            if (psCurrentNode == oSymTable->psFirstNode) {
-                oSymTable->psFirstNode = psNextNode;
+            if (psCurrentNode == oSymTable->psFirstNodes[i]) {
+                oSymTable->psFirstNodes[i] = psNextNode;
             }
             else {
                 psPrevNode->psNextNode = psNextNode;
@@ -269,7 +273,6 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         }
         psPrevNode = psCurrentNode;
     }
-    return NULL; */
     return NULL;
 }
 
@@ -279,13 +282,20 @@ void SymTable_map(SymTable_T oSymTable,
      void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
      const void *pvExtra)
 {
-    /* struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psCurrentNode;
+    size_t i;
 
     assert(oSymTable != NULL);
     assert(pfApply != NULL);
 
-    for (psCurrentNode = oSymTable->psFirstNode;
-        psCurrentNode != NULL;
-        psCurrentNode = psCurrentNode->psNextNode) 
-        (*pfApply)((char*) psCurrentNode->pcKey, (void*) psCurrentNode->pvValue, (void*) pvExtra); */
+    for (i = 0;
+        i != auBucketCounts[oSymTable->iBucketIdx];
+        i++) {
+            if (oSymTable->psFirstNodes[i] == NULL) continue;
+            for (psCurrentNode = oSymTable->psFirstNodes[i];
+            psCurrentNode != NULL;
+            psCurrentNode = psNextNode) {
+                (*pfApply)((char*) psCurrentNode->pcKey, (void*) psCurrentNode->pvValue, (void*) pvExtra);
+            }
+        }
 }
