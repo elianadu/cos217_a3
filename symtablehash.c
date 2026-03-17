@@ -251,7 +251,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     assert(pcKey != NULL);
 
     i = SymTable_hash(pcKey, auBucketCounts[oSymTable->iBucketIdx]);
-    psPrevNode = oSymTable->psFirstNode;
+    psPrevNode = oSymTable->psFirstNodes[i];
 
     for (psCurrentNode = oSymTable->psFirstNodes[i];
         psCurrentNode != NULL;
