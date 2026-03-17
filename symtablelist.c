@@ -35,7 +35,7 @@ struct SymTable
    struct SymTableNode *psFirstNode;
 
    /* The number of bindings */
-   size_t iLength;
+   size_t uLength;
 };
 
 /*--------------------------------------------------------------------*/
@@ -49,7 +49,7 @@ SymTable_T SymTable_new(void)
       return NULL;
 
    oSymTable->psFirstNode = NULL;
-   oSymTable->iLength = 0;
+   oSymTable->uLength = 0;
    
    return oSymTable;
 }
@@ -79,7 +79,7 @@ void SymTable_free(SymTable_T oSymTable)
 
  size_t SymTable_getLength(SymTable_T oSymTable){
     assert(oSymTable != NULL);
-    return (size_t) oSymTable->iLength;
+    return (size_t) oSymTable->uLength;
  }
 
 /*--------------------------------------------------------------------*/
@@ -109,7 +109,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
         psNewNode->pvValue = pvValue;
         psNewNode->psNextNode = oSymTable->psFirstNode;
         oSymTable->psFirstNode = psNewNode;
-        oSymTable->iLength += 1;
+        oSymTable->uLength += 1;
         return 1;
     }
     else {
@@ -208,7 +208,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
             }
             free((char *) psCurrentNode->pcKey);
             free(psCurrentNode);
-            oSymTable->iLength -= 1;
+            oSymTable->uLength -= 1;
             return pvOldValue;
         }
         psPrevNode = psCurrentNode;
