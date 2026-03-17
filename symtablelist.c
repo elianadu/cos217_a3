@@ -35,7 +35,7 @@ struct SymTable
    struct SymTableNode *psFirstNode;
 
    /* The number of bindings */
-   int iLength;
+   size_t iLength;
 };
 
 /*--------------------------------------------------------------------*/
@@ -195,6 +195,9 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         psCurrentNode != NULL;
         psCurrentNode = psNextNode)
     {
+        if (psCurrentNode == oSymTable->psFirstNode) {
+            psPrevNode = psCurrentNode;
+        }
         psNextNode = psCurrentNode->psNextNode;
         if (!strcmp(psCurrentNode->pcKey, pcKey)) {
             pvOldValue = (void*) psCurrentNode->pvValue;
