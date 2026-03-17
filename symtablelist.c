@@ -217,24 +217,13 @@ void SymTable_map(SymTable_T oSymTable,
      void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
      const void *pvExtra)
 {
-   /* struct SymTableNode *psCurrentNode;
-
-   assert(oSymTable != NULL);
-   assert(pfApply != NULL);
-
-   for (psCurrentNode = oSymTable->psFirstNode;
-        psCurrentNode != NULL;
-        psCurrentNode = psCurrentNode->psNextNode)
-      (*pfApply)((void*)psCurrentNode->pvItem, (void*)pvExtra); */
-    
     struct SymTableNode *psCurrentNode;
-    struct SymTableNode *psNextNode;
 
     assert(oSymTable != NULL);
     assert(pfApply != NULL);
 
     for (psCurrentNode = oSymTable->psFirstNode;
         psCurrentNode != NULL;
-        psCurrentNode = psNextNode) 
+        psCurrentNode = psCurrentNode->psNextNode) 
         (*pfApply)((char*) psCurrentNode->pcKey, (void*) psCurrentNode->pvValue, (void*) pvExtra);
 }
