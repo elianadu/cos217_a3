@@ -112,7 +112,6 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
         return 1;
     }
     else {
-        free(pcNewKey);
         return 0;
     }
 }
