@@ -3,7 +3,7 @@ Assignment 3 readme File
 ------------------------------------------------------------------------
 What is your name?
 
-
+Eliana Du
 
 ------------------------------------------------------------------------
 What authorized sources of information did you use to complete the
@@ -12,7 +12,10 @@ in the "Policies" web page (also available on armlab in the file
 ~cos217/AuthorizedSourcesList ) to this section of the readme file,
 and edit it as appropriate.
 
-
+COS 217 lecture materials.
+COS 217 precept materials.
+COS 217 website.
+COS 217 textbooks.
 
 ------------------------------------------------------------------------
 What unauthorized sources of information did you use to complete the
@@ -26,7 +29,7 @@ interaction, may additionally require the interaction being reported
 to the Committee on Discipline. Write "None" if you used no
 unauthorized sources of information.
 
-
+None.
 
 ------------------------------------------------------------------------
 In fulfillment of the requirement from section 2.4.3 of the Academic
@@ -36,7 +39,7 @@ enter your name in the space below the following affirmation:
 This paper represents my own work in accordance with University
 regulations.
 
-
+Eliana Du
 
 ------------------------------------------------------------------------
 In fulfillment of the requirement from section 2.4.6 of the Academic
@@ -44,12 +47,15 @@ Regulations in Princeton's Rights, Rules, Responsibilities guide,
 and the COS 217 Generative AI policy, disclose and describe how you
 used AI in completing this assignment:
 
-
+I used Claude to help me fix a memory issue in symtablelist.c that I was
+struggling to resolve on my own. I also asked it to help with some
+conceptual issues
 
 ------------------------------------------------------------------------
 What is your assessment of the assignment? Was it helpful? Was it fun?
 
-
+It was fun, but I wish it challenged my understanding of DMM more, 
+because I think my DMM foundations are still a bit shaky.
 
 ------------------------------------------------------------------------
 (optional) What information can you provide about your submission that
@@ -64,7 +70,7 @@ disagreements with them? Copy the splint warnings here, and express your
 disagreement after each warning. If there are no warnings, then write
 "None."
 
-
+None.
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on symtablelist.c, and what are your
@@ -72,6 +78,22 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
+symtablelist.c: line 88: medium priority:
+   Do you want to validate 'pvValue' through an assert?
+It's okay to put a binding with a null value. I also confirmed my
+justifications for these warnings with my preceptor.
+
+symtablelist.c: line 123: medium priority:
+   Do you want to validate 'pvValue' through an assert?
+It's okay to replace an existing binding with another binding
+that has a null value. 
+
+symtablelist.c: line 224: medium priority:
+   Do you want to validate 'pvExtra' through an assert?
+It's fine for the extra parameter pvExtra to be NULL if not relevant
+to the function we pass in. One instance of this is from our 
+implementation of a Stack in precept, where the third argument of 
+Stack_map is NULL when the function passed in is freeDouble.
 
 
 ------------------------------------------------------------------------
@@ -80,7 +102,7 @@ disagreements with them? Copy the splint warnings here, and express your
 disagreement after each warning. If there are no warnings, then write
 "None."
 
-
+None.
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on symtablehash.c, and what are your
@@ -88,7 +110,23 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
+symtablehash.c: line 133: medium priority:
+   Do you want to validate 'pvValue' through an assert?
+My justifications are the same as above, so I'll copy and paste those.
+It's okay to put a binding with a null value. I also confirmed my
+justifications for these warnings with my preceptor.
 
+symtablehash.c: line 172: medium priority:
+   Do you want to validate 'pvValue' through an assert?
+It's okay to replace an existing binding with another binding
+that has a null value. 
+
+symtablehash.c: line 284: medium priority:
+   Do you want to validate 'pvExtra' through an assert?
+It's fine for the extra parameter pvExtra to be NULL if not relevant
+to the function we pass in. One instance of this is from our 
+implementation of a Stack in precept, where the third argument of 
+Stack_map is NULL when the function passed in is freeDouble.
 
 ------------------------------------------------------------------------
 What are the CPU times reported by testsymtable.c with binding counts
