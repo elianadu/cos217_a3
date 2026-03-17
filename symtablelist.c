@@ -68,6 +68,7 @@ void SymTable_free(SymTable_T oSymTable)
         psCurrentNode = psNextNode)
    {
       psNextNode = psCurrentNode->psNextNode;
+      free((char *) psCurrentNode->pcKey);
       free(psCurrentNode);
    }
 
@@ -203,6 +204,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
             else {
                 psPrevNode->psNextNode = psNextNode;
             }
+            free((char *) psCurrentNode->pcKey);
             free(psCurrentNode);
             oSymTable->iLength -= 1;
             return pvOldValue;
