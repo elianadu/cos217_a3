@@ -175,6 +175,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
             oSymTable->ppsFirstNodes = ppsTempFirstNodes;
             oSymTable->iBucketIdx++;
         }
+        i = SymTable_hash(pcKey, auBucketCounts[oSymTable->iBucketIdx]);
 
         psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));    
         if (psNewNode == NULL) {
