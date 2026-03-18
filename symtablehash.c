@@ -174,6 +174,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
    struct SymTableNode *psNewNode;
    char *pcNewKey;
    size_t i;
+   struct SymTableNode **ppsTempFirstNodes;
 
    assert(oSymTable != NULL);
    assert(pcKey != NULL);
@@ -181,7 +182,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
     if (!SymTable_contains(oSymTable, pcKey)) {
         /* Expand if the number of bindings is too large and if the max number of buckets hasn't already been reached */
         if (oSymTable->uLength + 1 == auBucketCounts[oSymTable->iBucketIdx] && (size_t) oSymTable->iBucketIdx < sizeof(auBucketCounts)/sizeof(auBucketCounts[0]) - 1) {
-            ppsTempFirstNodes = SymTable_expansion(oSymTable, pcKey, pvValue)
+            ppsTempFirstNodes = SymTable_expansion(oSymTable, pcKey, pvValue);
             free(oSymTable->ppsFirstNodes);
             oSymTable->ppsFirstNodes = ppsTempFirstNodes;
             oSymTable->iBucketIdx++;
