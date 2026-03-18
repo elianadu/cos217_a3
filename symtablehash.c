@@ -32,6 +32,43 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
    return uHash % uBucketCount;
 }
 
+/* Function for hash expansion */
+
+static struct SymTableNode **SymTable_expansion(SymTable_T oSymTable,  const char *pcKey, const void *pvValue) {
+    size_t i;
+    size_t j;
+   struct SymTableNode **ppsTempFirstNodes;
+   struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
+    /* Making a temporary pointer to new array of pointers for the expanded table */
+    ppsTempFirstNodes = (struct SymTableNode **)malloc(sizeof(struct SymTableNode *) * auBucketCounts[oSymTable->iBucketIdx + 1]);
+    if (ppsTempFirstNodes== NULL) {
+        return 0;
+    }
+
+    /* Initializing all nodes in new temp array to NULL */
+    for (j = 0; j != auBucketCounts[oSymTable->iBucketIdx + 1]; j++) {
+        ppsTempFirstNodes[j] = NULL;
+    }
+    
+    /* Looping through through original table to rehash values and put them in the new table */
+    for (j = 0;
+        j != auBucketCounts[oSymTable->iBucketIdx];
+        j++) {
+        if (oSymTable->ppsFirstNodes[j] == NULL) continue;
+        for (psCurrentNode = oSymTable->ppsFirstNodes[j];
+        psCurrentNode != NULL;
+        psCurrentNode = psNextNode) {
+            psNextNode = psCurrentNode->psNextNode;
+            i = SymTable_hash((char *) psCurrentNode->pcKey, auBucketCounts[oSymTable->iBucketIdx + 1]);
+            psCurrentNode->psNextNode = ppsTempFirstNodes[i];
+            ppsTempFirstNodes[i] = psCurrentNode;
+        }
+    }
+
+    return ppsTempFirstNodes;
+}
+
 /*--------------------------------------------------------------------*/
 
 /* Each binding is stored in a SymTableNode.  SymTableNodes are 
@@ -134,10 +171,6 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
    struct SymTableNode *psNewNode;
    char *pcNewKey;
    size_t i;
-    size_t j;
-   struct SymTableNode **ppsTempFirstNodes;
-   struct SymTableNode *psCurrentNode;
-    struct SymTableNode *psNextNode;
 
    assert(oSymTable != NULL);
    assert(pcKey != NULL);
@@ -145,32 +178,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
     if (!SymTable_contains(oSymTable, pcKey)) {
         /* Expand if the number of bindings is too large and if the max number of buckets hasn't already been reached */
         if (oSymTable->uLength + 1 == auBucketCounts[oSymTable->iBucketIdx] && (size_t) oSymTable->iBucketIdx < sizeof(auBucketCounts)/sizeof(auBucketCounts[0]) - 1) {
-
-            /* Making a temporary pointer to new array of pointers for the expanded table */
-            ppsTempFirstNodes = (struct SymTableNode **)malloc(sizeof(struct SymTableNode *) * auBucketCounts[oSymTable->iBucketIdx + 1]);
-            if (ppsTempFirstNodes== NULL) {
-                return 0;
-            }
-
-            /* Initializing all nodes in new temp array to NULL */
-            for (j = 0; j != auBucketCounts[oSymTable->iBucketIdx + 1]; j++) {
-                ppsTempFirstNodes[j] = NULL;
-            }
-            
-            /* Looping through through original table to rehash values and put them in the new table */
-            for (j = 0;
-                j != auBucketCounts[oSymTable->iBucketIdx];
-                j++) {
-                if (oSymTable->ppsFirstNodes[j] == NULL) continue;
-                for (psCurrentNode = oSymTable->ppsFirstNodes[j];
-                psCurrentNode != NULL;
-                psCurrentNode = psNextNode) {
-                    psNextNode = psCurrentNode->psNextNode;
-                    i = SymTable_hash((char *) psCurrentNode->pcKey, auBucketCounts[oSymTable->iBucketIdx + 1]);
-                    psCurrentNode->psNextNode = ppsTempFirstNodes[i];
-                    ppsTempFirstNodes[i] = psCurrentNode;
-                }
-            }
+            ppsTempFirstNodes = SymTable_expansion(oSymTable, pcKey, pvValue)
             free(oSymTable->ppsFirstNodes);
             oSymTable->ppsFirstNodes = ppsTempFirstNodes;
             oSymTable->iBucketIdx++;
