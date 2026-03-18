@@ -168,7 +168,6 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
                     i = SymTable_hash((char *) psCurrentNode->pcKey, auBucketCounts[oSymTable->iBucketIdx + 1]);
                     psCurrentNode->psNextNode = ppsTempFirstNodes[i];
                     ppsTempFirstNodes[i] = psCurrentNode;
-                    }
                 }
             }
             free(oSymTable->ppsFirstNodes);
