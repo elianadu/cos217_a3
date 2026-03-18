@@ -152,6 +152,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
                 return 0;
             }
 
+            /* Initializing all nodes in new temp array to NULL */
             for (j = 0; j != auBucketCounts[oSymTable->iBucketIdx + 1]; j++) {
                 ppsTempFirstNodes[j] = NULL;
             }
@@ -174,6 +175,9 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
             oSymTable->ppsFirstNodes = ppsTempFirstNodes;
             oSymTable->iBucketIdx++;
         }
+
+        /* Inserting new node into table, potentially after table expansion */
+
         i = SymTable_hash(pcKey, auBucketCounts[oSymTable->iBucketIdx]);
 
         psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));    
