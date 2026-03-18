@@ -32,7 +32,42 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
    return uHash % uBucketCount;
 }
 
-/* Function for hash expansion */
+/*--------------------------------------------------------------------*/
+
+/* Each binding is stored in a SymTableNode.  SymTableNodes are 
+pointers to a linked list.  */
+
+struct SymTableNode
+{
+   /* The key. */
+   const char *pcKey;
+
+   /* The value. */
+   const void *pvValue;
+   
+   /* The address of the next SymTableNode. */
+   struct SymTableNode *psNextNode;
+};
+
+/*--------------------------------------------------------------------*/
+
+/* A SymTable is a pointer to an array of many first pointers. */
+
+struct SymTable
+{
+   /* A pointer to an array of pointers */
+   struct SymTableNode **ppsFirstNodes;
+
+   /* The number of bindings */
+   size_t uLength;
+
+   /* The index of auBucketCounts that denotes the number of buckets */
+   int iBucketIdx;
+};
+
+/*--------------------------------------------------------------------*/
+
+/* Returns a pointer an expanded array of rehashed nodes */
 
 static struct SymTableNode **SymTable_expansion(SymTable_T oSymTable,  const char *pcKey, const void *pvValue) {
     size_t i;
@@ -69,38 +104,6 @@ static struct SymTableNode **SymTable_expansion(SymTable_T oSymTable,  const cha
     return ppsTempFirstNodes;
 }
 
-/*--------------------------------------------------------------------*/
-
-/* Each binding is stored in a SymTableNode.  SymTableNodes are 
-pointers to a linked list.  */
-
-struct SymTableNode
-{
-   /* The key. */
-   const char *pcKey;
-
-   /* The value. */
-   const void *pvValue;
-   
-   /* The address of the next SymTableNode. */
-   struct SymTableNode *psNextNode;
-};
-
-/*--------------------------------------------------------------------*/
-
-/* A SymTable is a pointer to an array of many first pointers. */
-
-struct SymTable
-{
-   /* A pointer to an array of pointers */
-   struct SymTableNode **ppsFirstNodes;
-
-   /* The number of bindings */
-   size_t uLength;
-
-   /* The index of auBucketCounts that denotes the number of buckets */
-   int iBucketIdx;
-};
 
 /*--------------------------------------------------------------------*/
 
