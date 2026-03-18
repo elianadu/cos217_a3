@@ -144,7 +144,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
 
     if (!SymTable_contains(oSymTable, pcKey)) {
         /* Expand if the number of bindings is too large and if the max number of buckets hasn't already been reached */
-        if (oSymTable->uLength + 1 == auBucketCounts[oSymTable->iBucketIdx] && (size_t) oSymTable->iBucketIdx < sizeof(auBucketCounts)/sizeof(auBucketCounts[0])) {
+        if (oSymTable->uLength + 1 == auBucketCounts[oSymTable->iBucketIdx] && (size_t) oSymTable->iBucketIdx < sizeof(auBucketCounts)/sizeof(auBucketCounts[0]) - 1) {
 
             /* Making a temporary pointer to new array of pointers for the expanded table */
             ppsTempFirstNodes = (struct SymTableNode **)malloc(sizeof(struct SymTableNode *) * auBucketCounts[oSymTable->iBucketIdx + 1]);
