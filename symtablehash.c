@@ -142,8 +142,6 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
    assert(oSymTable != NULL);
    assert(pcKey != NULL);
 
-   i = SymTable_hash(pcKey, auBucketCounts[oSymTable->iBucketIdx]);
-
     if (!SymTable_contains(oSymTable, pcKey)) {
         /* Expand if the number of bindings is too large and if the max number of buckets hasn't already been reached */
         if (oSymTable->uLength + 1 == auBucketCounts[oSymTable->iBucketIdx] && (size_t) oSymTable->iBucketIdx < sizeof(auBucketCounts)/sizeof(auBucketCounts[0])) {
