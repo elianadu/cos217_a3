@@ -176,7 +176,6 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
    struct SymTableNode *psNewNode;
    char *pcNewKey;
    size_t i;
-   struct SymTableNode **ppsTempFirstNodes;
 
    assert(oSymTable != NULL);
    assert(pcKey != NULL);
