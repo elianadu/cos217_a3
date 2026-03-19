@@ -67,9 +67,9 @@ struct SymTable
 
 /*--------------------------------------------------------------------*/
 
-/* Rehashes nodes in oSymTable and links nodes to an expanded array. Returns a pointer to the new expanded array. */
+/* Rehashes nodes in oSymTable, links nodes to an expanded array, and frees original array. */
 
-static struct SymTableNode **SymTable_expansion(SymTable_T oSymTable) {
+static void SymTable_expansion(SymTable_T oSymTable) {
     size_t i;
     size_t j;
     struct SymTableNode **ppsTempFirstNodes;
@@ -101,8 +101,9 @@ static struct SymTableNode **SymTable_expansion(SymTable_T oSymTable) {
             ppsTempFirstNodes[i] = psCurrentNode;
         }
     }
-
-    return ppsTempFirstNodes;
+    free(oSymTable->ppsFirstNodes);
+    oSymTable->ppsFirstNodes = ppsTempFirstNodes;
+    oSymTable->iBucketIdx++;
 }
 
 
@@ -183,11 +184,7 @@ int SymTable_put(SymTable_T oSymTable,  const char *pcKey, const void *pvValue)
     if (!SymTable_contains(oSymTable, pcKey)) {
         /* Expand if the number of bindings is too large and if the max number of buckets hasn't already been reached */
         if (oSymTable->uLength + 1 == auBucketCounts[oSymTable->iBucketIdx] && (size_t) oSymTable->iBucketIdx < sizeof(auBucketCounts)/sizeof(auBucketCounts[0]) - 1) {
-            ppsTempFirstNodes = SymTable_expansion(oSymTable);
-            if (ppsTempFirstNodes == NULL) return 0;
-            free(oSymTable->ppsFirstNodes);
-            oSymTable->ppsFirstNodes = ppsTempFirstNodes;
-            oSymTable->iBucketIdx++;
+            SymTable_expansion(oSymTable);
         }
 
         /* Inserting new node into table, potentially after table expansion */

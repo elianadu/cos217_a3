@@ -102,7 +102,10 @@ disagreements with them? Copy the splint warnings here, and express your
 disagreement after each warning. If there are no warnings, then write
 "None."
 
-None.
+symtablehash.c:100:41: Value ppsTempFirstNodes[] used before definition
+  An rvalue is used that may not be initialized to a value on some execution
+  path. (Use -usedef to inhibit warning)
+I iterate ppsTempFirstNodes
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on symtablehash.c, and what are your
