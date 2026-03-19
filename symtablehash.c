@@ -67,7 +67,7 @@ struct SymTable
 
 /*--------------------------------------------------------------------*/
 
-/* Rehashes nodes in oSymTable, links nodes to an expanded array, and frees original array. Returns a 0 if memory fails to be relocated and a 1 otherwise */
+/* Rehashes nodes in oSymTable, links nodes to an expanded array, and frees original array. Returns if memory fails to be allocated. */
 
 static void SymTable_expansion(SymTable_T oSymTable) {
     size_t i;
