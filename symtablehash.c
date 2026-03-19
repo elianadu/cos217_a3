@@ -67,7 +67,7 @@ struct SymTable
 
 /*--------------------------------------------------------------------*/
 
-/* Rehashes nodes in oSymTable, links nodes to an expanded array, and frees original array. */
+/* Rehashes nodes in oSymTable, links nodes to an expanded array, and frees original array. Returns a 0 if memory fails to be relocated and a 1 otherwise */
 
 static void SymTable_expansion(SymTable_T oSymTable) {
     size_t i;
@@ -79,7 +79,7 @@ static void SymTable_expansion(SymTable_T oSymTable) {
     /* Making a temporary pointer to new array of pointers for the expanded table */
     ppsTempFirstNodes = (struct SymTableNode **)malloc(sizeof(struct SymTableNode *) * auBucketCounts[oSymTable->iBucketIdx + 1]);
     if (ppsTempFirstNodes== NULL) {
-        return NULL;
+        return;
     }
 
     /* Initializing all nodes in new temp array to NULL */
