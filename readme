@@ -105,7 +105,7 @@ disagreement after each warning. If there are no warnings, then write
 symtablehash.c:100:41: Value ppsTempFirstNodes[] used before definition
   An rvalue is used that may not be initialized to a value on some execution
   path. (Use -usedef to inhibit warning)
-I iterate ppsTempFirstNodes
+I iterate through ppsTempFirstNodes and initialize all new nodes to NULL. I went to David's OH and he said it was okay.
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on symtablehash.c, and what are your
@@ -126,10 +126,7 @@ that has a null value.
 
 symtablehash.c: line 284: medium priority:
    Do you want to validate 'pvExtra' through an assert?
-It's fine for the extra parameter pvExtra to be NULL if not relevant
-to the function we pass in. One instance of this is from our 
-implementation of a Stack in precept, where the third argument of 
-Stack_map is NULL when the function passed in is freeDouble.
+It's fine for the extra parameter pvExtra to be NULL if not relevant to the function we pass in. One instance of this is from our implementation of a Stack in precept, where the third argument of Stack_map is NULL when the function passed in is freeDouble.
 
 ------------------------------------------------------------------------
 What are the CPU times reported by testsymtable.c with binding counts
@@ -138,11 +135,11 @@ implementation, (2) your non-expanding hash table implementation, and
 (3) your expanding hash table implementation? Fill in the blanks.
 
 The linked list implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed 0.000000 seconds.
+-- 500 bindings consumed 0.002158 seconds.
+-- 5000 bindings consumed 0.209833 seconds.
+-- 50000 bindings consumed 27.148532 seconds.
+-- 500000 bindings consumed Killed seconds.
 
 The non-expanding hash table implementation with:
 -- 50 bindings consumed ________ seconds.
@@ -152,8 +149,8 @@ The non-expanding hash table implementation with:
 -- 500000 bindings consumed ________ seconds.
 
 The expanding hash table implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed 0.000000 seconds.
+-- 500 bindings consumed 0.003865 seconds.
+-- 5000 bindings consumed 0.029991 seconds.
+-- 50000 bindings consumed 0.365419 seconds.
+-- 500000 bindings consumed 3.896768 seconds.
